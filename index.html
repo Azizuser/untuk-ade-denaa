@@ -134,7 +134,7 @@
         .slide img {
             width: 100%;
             height: auto;
-            max-height: 380px; /* Batasi tinggi maksimal di layar besar agar tidak kepanjangan */
+            max-height: 380px;
             display: block;
             object-fit: contain;
         }
@@ -202,6 +202,32 @@
             box-shadow: 0 2px 10px rgba(255, 92, 138, 0.4);
         }
 
+        /* Tombol Musik Terapung */
+        .music-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border: 2px solid var(--accent-color);
+            color: var(--accent-hover);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            z-index: 100;
+            transition: 0.3s;
+        }
+
+        .music-toggle:hover {
+            transform: scale(1.1);
+            background: var(--bg-color);
+        }
+
         /* Pesan Kejutan */
         .surprise-box {
             background: #fff0f3;
@@ -265,6 +291,15 @@
 </head>
 <body>
 
+    <!-- Tombol Musik (Mute / Unmute) di Pojok Kanan Atas -->
+    <div class="music-toggle" id="musicBtn" onclick="toggleMusic()">🎵</div>
+
+    <!-- Elemen Audio menggunakan file musik.mp3 -->
+    <audio id="bgMusic" loop>
+        <source src="musik.mp3" type="audio/mpeg">
+        Browsermu tidak mendukung elemen audio.
+    </audio>
+
     <!-- Wadah Balon Terbang -->
     <div id="flying-balloons-area"></div>
 
@@ -307,7 +342,7 @@
             <p style="text-align: left; font-size: 0.9rem;">
                 Selamat ulang tahun ya, cewek paling manis mas aziz aja! 😎<br><br>
                 Semoga di umur yang baru ini Adee selalu sehat, bahagia terus, dan semua impian Adee bisa tercapai. Jangan pernah capek buat senyum ya, karena senyum Adee itu favorit Mas! 😻<br><br>
-                Terima kasih udah menerima laki-laki ini.😊 <span class="love-icon">❤️</span>
+                Terima kasih udah menerima laki-laki ini 😊. <span class="love-icon">❤️</span>
             </p>
             
             <button class="btn" id="surpriseBtn" onclick="revealSurprise()">Pencet Tombol Ini 🎁</button>
@@ -323,7 +358,36 @@
     </div>
 
     <script>
+        const music = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicBtn');
+        let isPlaying = false;
+
+        function playMusic() {
+            music.play().then(() => {
+                isPlaying = true;
+                musicBtn.innerHTML = '🔊';
+            }).catch(error => {
+                console.log("Autoplay dicegah browser, menunggu klik user.");
+            });
+        }
+
+        function toggleMusic() {
+            if (isPlaying) {
+                music.pause();
+                isPlaying = false;
+                musicBtn.innerHTML = '🔇';
+            } else {
+                music.play();
+                isPlaying = true;
+                musicBtn.innerHTML = '🔊';
+            }
+        }
+
         function nextPage(pageNum) {
+            if(!isPlaying) {
+                playMusic();
+            }
+
             document.querySelectorAll('.page').forEach(page => {
                 page.classList.remove('active');
             });
