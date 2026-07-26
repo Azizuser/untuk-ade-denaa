@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday, Sayang! 🐾💖</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Sacramento&display=swap" rel="stylesheet">
+    <!-- Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --bg-color: #fff0f3;
+            --card-bg: #ffffff;
+            --text-color: #59405c;
+            --accent-color: #ff8fab;
+            --accent-hover: #ff5c8a;
+            --shadow: 0 10px 30px rgba(255, 143, 171, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Fredoka', sans-serif; /* Font yang lebih bulat dan lucu */
+            background-color: var(--bg-color);
+            /* Latar Belakang Jejak Kaki Kucing (Paw Pattern) */
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 35c-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6-2.7 6-6 6zm-12-8c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4zm24 0c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4zm-12 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8z' fill='%23ffb3c6' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E");
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 30px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            position: relative;
+            border: 4px dashed #ffc2d1; /* Border lucu */
+        }
+
+        /* Halaman / Card */
+        .page {
+            display: none;
+            animation: fadeIn 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards; /* Efek masuk memantul */
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        h1 {
+            font-family: 'Sacramento', cursive;
+            font-size: 3.8rem;
+            color: var(--accent-hover);
+            margin-bottom: 5px;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+            color: var(--accent-hover);
+        }
+
+        p {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            color: #7a607d;
+        }
+
+        .love-icon {
+            color: #ff5c8a;
+            animation: heartbeat 1.5s infinite;
+            display: inline-block;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+
+        /* Slider Foto */
+        .slider-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(255, 143, 171, 0.3);
+            border: 3px solid var(--accent-color);
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .slide-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            color: var(--accent-hover);
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 1.2rem;
+            transition: 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .slide-btn:hover {
+            background: var(--accent-hover);
+            color: white;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .prev { left: 10px; }
+        .next { right: 10px; }
+
+        /* Tombol Interaktif */
+        .btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            font-family: 'Fredoka', sans-serif;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 143, 171, 0.5);
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 92, 138, 0.6);
+        }
+
+        /* Pesan Rahasia Kejutan (Kucing) */
+        .surprise-box {
+            background: #fff0f3;
+            border: 3px dashed var(--accent-color);
+            padding: 20px;
+            border-radius: 20px;
+            margin-top: 15px;
+            display: none;
+            animation: popUp 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+        }
+
+        .surprise-box img {
+            width: 150px;
+            border-radius: 15px;
+            margin-bottom: 10px;
+        }
+
+        @keyframes popUp {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- HALAMAN 1: Sambutan Awal -->
+        <div id="page-1" class="page active">
+            <div style="font-size: 60px; margin-bottom: -10px;">😻</div>
+            <h1>Meow, Sayang!</h1>
+            <p>Ada sesuatu yang spesial nih khusus buat kamu yang lagi ulang tahun hari ini <span class="love-icon">❤️</span> Mau lihat kan? 🐾</p>
+            <button class="btn" onclick="nextPage(2)">Buka Kejutan 💌</button>
+        </div>
+
+        <!-- HALAMAN 2: Slide 4 Foto -->
+        <div id="page-2" class="page">
+            <h2>Momen Cantikmu 📸</h2>
+            <div class="slider-container">
+                <!-- 4 Foto Sesuai Permintaan -->
+                <div class="slide active">
+                    <img src="foto1.jpg" alt="Foto 1">
+                </div>
+                <div class="slide">
+                    <img src="foto2.jpg" alt="Foto 2">
+                </div>
+                <div class="slide">
+                    <img src="foto3.jpg" alt="Foto 3">
+                </div>
+                <div class="slide">
+                    <img src="foto4.jpg" alt="Foto 4">
+                </div>
+                <button class="slide-btn prev" onclick="changeSlide(-1)">❮</button>
+                <button class="slide-btn next" onclick="changeSlide(1)">❯</button>
+            </div>
+            <p style="font-size: 0.9rem; margin-bottom: 15px;">Kucing aja lucu, tapi kamu jauh lebih lucu! <span class="love-icon">❤️</span></p>
+            <button class="btn" onclick="nextPage(3)">Lanjut Baca 🐾</button>
+        </div>
+
+        <!-- HALAMAN 3: Kata-Kata Ucapan & Tombol Kejutan -->
+        <div id="page-3" class="page">
+            <h1>Happy Birthday! 🎉</h1>
+            <p style="text-align: left; font-size: 0.95rem;">
+                Selamat ulang tahun ya, cewek paling manis sejagat raya! 🌸<br><br>
+                Semoga di umur yang baru ini kamu selalu sehat, bahagia terus, dan semua impian kamu bisa tercapai. Jangan pernah capek buat senyum ya, karena senyum kamu itu favorit aku! 😻<br><br>
+                Terima kasih udah jadi orang yang luar biasa. <span class="love-icon">❤️</span>
+            </p>
+            
+            <button class="btn" id="surpriseBtn" onclick="revealSurprise()">Pencet Tombol Ini 🎁</button>
+
+            <!-- Animasi & Pesan Kejutan Kucing -->
+            <div id="surpriseBox" class="surprise-box">
+                <!-- GIF Kucing Lucu -->
+                <img src="https://media.tenor.com/ZynZ-7tT5BMAAAAi/peach-cat-cute.gif" alt="Cute Cat">
+                <h3 style="color: var(--accent-hover); margin-bottom: 5px;">I Love You! 💖</h3>
+                <p style="margin-bottom: 0; font-size: 0.9rem;">"Semoga kita bisa bareng-bareng terus ya. <i>Happy level up day</i>, kesayangan!" 🐾</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fungsi Pindah Halaman
+        function nextPage(pageNum) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById('page-' + pageNum).classList.add('active');
+
+            // Jalankan efek konfeti saat masuk ke halaman 3
+            if(pageNum === 3) {
+                confetti({
+                    particleCount: 120,
+                    spread: 80,
+                    origin: { y: 0.6 },
+                    colors: ['#ffc2d1', '#ff8fab', '#ff5c8a', '#ffffff'] // Konfeti warna pastel
+                });
+            }
+        }
+
+        // Fungsi Slider Foto
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+
+        function changeSlide(direction) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + direction + slides.length) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }
+
+        // Fungsi Tombol Kejutan
+        function revealSurprise() {
+            const box = document.getElementById('surpriseBox');
+            const btn = document.getElementById('surpriseBtn');
+            box.style.display = 'block';
+            btn.style.display = 'none'; // Sembunyikan tombol setelah diklik
+
+            // Ledakan konfeti tambahan saat tombol kejutan dipencet
+            confetti({
+                particleCount: 200,
+                spread: 120,
+                origin: { y: 0.7 },
+                colors: ['#ffc2d1', '#ff8fab', '#ff5c8a', '#ffffff']
+            });
+        }
+    </script>
+</body>
+</html>
